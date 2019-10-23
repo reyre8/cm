@@ -1,5 +1,5 @@
 # Campaign Monitor Technical Test
-####*Author: Reynaldo Rojas*
+###*Author: Reynaldo Rojas*
 
 ### Requirements
 
@@ -43,7 +43,7 @@ After downloading the folder, access the root of it via the command console, and
 `$ npm install`
 
 >Note:
-If the application presents any issues related to eslint, simply execute `npm run lint` in order to fix the issues.
+If the application presents any issues related to eslint, simply execute `npm run lint-fix` in order to fix the issues.
 
 ### Testing questions 1 - 4
 
