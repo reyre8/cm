@@ -1,0 +1,97 @@
+-- Table Salesperson
+DROP TABLE IF EXISTS Salesperson;
+CREATE TABLE IF NOT EXISTS Salesperson (
+  SalesPersonID int PRIMARY KEY,
+  Name          varchar(64) not null,
+  Age           int not null,
+  Salary        numeric(10) not null
+);
+
+-- Table Customer
+DROP TABLE IF EXISTS Customer;
+CREATE TABLE IF NOT EXISTS Customer (
+  CustomerID    int PRIMARY KEY,
+  Name          varchar(64) not null
+);
+
+-- Table Orders
+DROP TABLE IF EXISTS Orders;
+CREATE TABLE IF NOT EXISTS Orders (
+  OrderID       int PRIMARY KEY,
+  OrderDate     date not null,
+  CustomerID    int not null,
+  SalespersonID int not null,
+  NumberOfUnits int not null,
+  CostOfUnit    numeric(10) not null
+);
+
+-- Data
+INSERT INTO Salesperson (SalesPersonID, Name, Age, Salary) VALUES (1, 'Alice', 61, 140000), (2, 'Bob', 34, 44000), (6, 'Chris', 34, 40000), (8, 'Derek', 41, 52000), (11, 'Emmit', 57, 115000), (16, 'Fred', 38, 38000);
+INSERT INTO Customer (CustomerID, Name) VALUES (4, 'George'), (6, 'Harry'), (7, 'Ingrid'), (11, 'Jerry');
+INSERT INTO Orders (OrderID, OrderDate, CustomerID, SalesPersonID, NumberOfUnits, CostOfUnit) VALUES (3, '2013-01-17', 4, 2, 4, 400), (6, '2013-02-07', 4, 1, 1, 600), (10, '2013-03-04', 7, 6, 2, 300), (17, '2013-03-15', 6, 1, 5, 300), (25, '2013-04-19', 11, 11, 7, 300), (34, '2013-04-22', 11, 11, 100, 26), (57, '2013-07-12', 7, 11, 14, 11);
+
+----------------
+-- Question 5 --
+----------------
+
+-- A
+SELECT DISTINCT s.name
+ FROM Salesperson s
+ JOIN Orders o ON o.salespersonid = s.salespersonid
+ JOIN Customer c ON c.customerid = o.customerid
+WHERE c.name = 'George';
+
+-- B
+   SELECT DISTINCT s.name
+     FROM Salesperson s
+LEFT JOIN Orders o ON o.salespersonid = s.salespersonid
+LEFT JOIN Customer c ON c.customerid = o.customerid
+    WHERE (c.name != 'George'
+      AND NOT EXISTS (
+     SELECT o2.OrderId
+     FROM Orders o2
+       JOIN customer c2 ON c2.customerid = o2.customerid
+    WHERE c2.name = 'George' 
+          AND o.salespersonid = o2.salespersonid))
+     OR o.salespersonid IS NULL;
+  
+-- C
+  SELECT s.name
+    FROM Salesperson s
+    JOIN Orders o ON s.salespersonid = o.salespersonid
+GROUP BY s.name
+  HAVING COUNT(o.orderid) >= 2;
+
+----------------
+-- Question 6 --
+----------------
+
+-- A
+  SELECT name
+    FROM Salesperson
+ORDER BY salary DESC
+   LIMIT 1
+  OFFSET 2;
+
+-- B
+-- Create table BigOrders
+DROP TABLE IF EXISTS BigOrders;
+CREATE TABLE IF NOT EXISTS BigOrders (
+  CustomerID int PRIMARY KEY,
+  TotalOrderValue numeric(10) not null
+);
+
+-- Insert customerids with total amount greater than 1000
+INSERT INTO BigOrders (
+  SELECT customerid, SUM(numberofunits * costofunit)
+    FROM orders
+GROUP BY customerid
+  HAVING SUM(numberofunits * costofunit) > 1000);
+
+-- C
+  SELECT EXTRACT(YEAR FROM orderdate) AS Year,
+         EXTRACT(MONTH FROM orderdate) AS Month, 
+         SUM(numberofunits * costofunit) AS TotalAmount
+    FROM orders
+GROUP BY Year, Month
+ORDER BY Year, Month DESC;
