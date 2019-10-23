@@ -1,5 +1,5 @@
 # Campaign Monitor Technical Test
-###*Author: Reynaldo Rojas*
+### *Author: Reynaldo Rojas*
 
 ### Requirements
 
@@ -65,11 +65,11 @@ The **DBMS** used for these questions is PostgreSQL v 10.  The file `/database/S
 ### Assumptions
 
 #### Question 1
-- The arameter to the function should be provided/defined, otherwise function will throw an Error.
+- The parameter to the function should be provided/defined, otherwise function will throw an Error.
 - Strings made of spaces (i.e. “    ”) are also considered empty.
 
 #### Question 2
-- The arameter to the function should be provided/defined, otherwise function will throw an Error.
+- The parameter to the function should be provided/defined, otherwise function will throw an Error.
 - Zero (0) is not consider a positive integer (or a natural number).
 
 #### Question 3
